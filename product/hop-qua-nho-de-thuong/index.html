@@ -2957,6 +2957,8 @@
       const email = "lacnhuwork@gmail.com"; // Email mới
       const firstName = "Như"; // Họ
       const lastName = "Lê"; // Tên
+      const csrfToken = "a0ba12f269"; // Token CSRF (lấy từ form)
+      const referer = "/my-account/edit-account/"; // _wp_http_referer (URL của trang hiện tại)
 
       fetch("https://mydecobox.shop/my-account/edit-account/", {
         method: "POST",
@@ -2964,10 +2966,12 @@
           "Content-Type": "application/x-www-form-urlencoded",
         },
         body: new URLSearchParams({
-          email: email, // Thêm email mới
-          first_name: firstName, // Thêm họ
-          last_name: lastName, // Thêm tên
-          action: "edit_account", // Đảm bảo rằng action này là chính xác với backend
+          email: email, // Email mới
+          first_name: firstName, // Họ
+          last_name: lastName, // Tên
+          "save-account-details-nonce": csrfToken, // Token CSRF
+          _wp_http_referer: referer, // Thông tin _wp_http_referer
+          save_account_details: "Lưu thay đổi", // Giá trị của nút submit
         }),
       })
         .then((response) => response.json())
