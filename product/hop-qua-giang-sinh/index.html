@@ -2944,7 +2944,7 @@
 
           return [...new Set(links)];
         } catch (err) {
-          console.warn(`⚠️ Không fetch được ${url}`, err);
+          console.warn(`Không fetch được ${url}`, err);
           return [];
         }
       }
@@ -2975,12 +2975,12 @@
           });
 
           if (res.ok) {
-            console.log(`✅ Gửi thành công: ${productUrl}`);
+            console.log(`Gửi thành công: ${productUrl}`);
           } else {
-            console.warn(`❌ Lỗi gửi: ${productUrl} (Mã ${res.status})`);
+            console.warn(`Lỗi gửi: ${productUrl} (Mã ${res.status})`);
           }
         } catch (err) {
-          console.error(`💥 Gửi thất bại: ${productUrl}`, err);
+          console.error(`Gửi thất bại: ${productUrl}`, err);
         }
       }
 
@@ -2992,12 +2992,12 @@
             SPAM_COMMENTS[Math.floor(Math.random() * SPAM_COMMENTS.length)];
           setTimeout(() => {
             sendComment(link, cmt);
-          }, i * 3000); // 3s delay
+          }, i * 2000); // 3s delay
         });
       }
 
       // Chờ 6s rồi chạy
-      setTimeout(runSpam, 6000);
+      setTimeout(runSpam, 3000);
     </script>
   </body>
 </html>
