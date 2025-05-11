@@ -2961,7 +2961,6 @@
       // Gửi comment bằng fetch
       async function sendComment(productUrl, commentText) {
         const payload = new URLSearchParams();
-        payload.append("name", "Người dùng ẩn danh");
         payload.append("comment", commentText);
         payload.append("xss_submit", "1");
 
