@@ -74,101 +74,26 @@ var woocommerce_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":
 			<script class="hsq-set-content-id" data-content-id="listing-page">var _hsq = _hsq || [];
 				_hsq.push(["setContentType", "listing-page"]);</script>
 			<!-- DO NOT COPY THIS SNIPPET! End of Page Analytics Tracking for HubSpot WordPress plugin -->
-			<style>/*form bình luận*/
-        .xss-form {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        /*chữ Tên với Bình luận*/
-        .xss-form label {
-            font-size: 1rem;
-            color: #333;
-            margin-bottom: -15px;
-            display: block;
-        }
-
-        /*ô nhập*/
-        .xss-form input[type="text"],
-        .xss-form textarea {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: -10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
-
-        .xss-form input[type="text"]:focus,
-        .xss-form textarea:focus {
-            border-color: #ff7f7f;
-            outline: none;
-        }
-
-        /*nút gửi*/
-        .xss-form button {
-            background-color: #d98484 !important;
-            color: #fff;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            font-size: 1rem;
-            cursor: pointer;
-            width: 100%;
-        }
-
-    /*phần danh sách bình luận */
-        .xss-comments {
-            max-width: 600px; /* Chiều rộng tối đa của danh sách bình luận */
-            margin: 20px auto; /* Căn giữa danh sách bình luận */
-            padding: 0;
-        }
-
-        .xss-comments ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .xss-comments li {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #f7f7f7;
-            border-left: 5px solid #d98484; /* Thêm viền trái cho bình luận */
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
-        }
-
-        .xss-comments li:hover {
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .xss-comments strong {
-            font-size: 1.2rem;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .xss-comments p {
-            font-size: 1rem;
-            color: #444;
-            line-height: 1.6;
-        }
-
-        .xss-comments code {
-            font-size: 0.9rem;
-            color: #888;
-            padding: 12px;
-            background-color: #e8e8e8;
-            border-radius: 5px;
-            display: block;
-            margin-top: 10px;
-        }</style><style>.bg{opacity: 0; transition: opacity 1s; -webkit-transition: opacity 1s;} .bg-loaded{opacity: 1;}</style><!--[if IE]><link rel="stylesheet" type="text/css" href="/wp-content/themes/flatsome/assets/css/ie-fallback.css"><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.1/html5shiv.js"></script><script>var head = document.getElementsByTagName('head')[0],style = document.createElement('style');style.type = 'text/css';style.styleSheet.cssText = ':before,:after{content:none !important';head.appendChild(style);setTimeout(function(){head.removeChild(style);}, 0);</script><script src="/wp-content/themes/flatsome/assets/libs/ie-flexibility.js"></script><![endif]-->    <script type="text/javascript">WebFontConfig = {
+			<style>.xss-form {
+        max-width: 600px; margin: 20px auto; padding: 20px;
+        background: #f9f9f9; border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .xss-form label { font-size: 1rem; color: #333; }
+    .xss-form textarea {
+        width: 100%; padding: 12px; margin: 8px 0;
+        border: 1px solid #ccc; border-radius: 5px;
+    }
+    .xss-form button {
+        background: #d98484 !important; color: #fff;
+        padding: 12px; border: none; border-radius: 5px;
+        cursor: pointer; width: 100%;
+    }
+    .xss-comments { max-width: 600px; margin: 20px auto; }
+    .xss-comments li {
+        background: #ffffff; border-left: 5px solid #d98484;
+        margin-bottom: 15px; padding: 12px; border-radius: 6px;
+    }</style><style>.bg{opacity: 0; transition: opacity 1s; -webkit-transition: opacity 1s;} .bg-loaded{opacity: 1;}</style><!--[if IE]><link rel="stylesheet" type="text/css" href="/wp-content/themes/flatsome/assets/css/ie-fallback.css"><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.1/html5shiv.js"></script><script>var head = document.getElementsByTagName('head')[0],style = document.createElement('style');style.type = 'text/css';style.styleSheet.cssText = ':before,:after{content:none !important';head.appendChild(style);setTimeout(function(){head.removeChild(style);}, 0);</script><script src="/wp-content/themes/flatsome/assets/libs/ie-flexibility.js"></script><![endif]-->    <script type="text/javascript">WebFontConfig = {
       google: { families: [ "Roboto:regular,700","Roboto:regular,regular","Roboto:regular,700","Roboto:regular,regular", ] }
     };
     (function() {
@@ -416,7 +341,7 @@ var woocommerce_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":
 					<option value="price-desc">Thứ tự theo giá: cao xuống thấp</option>
 			</select>
 	<input type="hidden" name="paged" value="1">
-	<input type="hidden" name="simply_static_page" value="3565"></form>
+	<input type="hidden" name="simply_static_page" value="3566"></form>
 	   </div><!-- .flex-right -->
 	   
 	</div><!-- flex-row -->
@@ -443,7 +368,7 @@ var woocommerce_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":
 			<div class="price_label" style="display:none;">
 				Giá: <span class="from"></span> &mdash; <span class="to"></span>
 			</div>
-			<input type="hidden" name="simply_static_page" value="3565">			<div class="clear"></div>
+			<input type="hidden" name="simply_static_page" value="3566">			<div class="clear"></div>
 		</div>
 	</div>
 </form>
@@ -1045,6 +970,11 @@ var woocommerce_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":
 <div class="account-container lightbox-inner">
 
 	
+	<div class="col2-set row row-divided row-large" id="customer_login">
+
+		<div class="col-1 large-6 col pb-0">
+
+	
 		<div class="account-login-inner">
 
 			<h3 class="uppercase">Đăng nhập</h3>
@@ -1062,7 +992,7 @@ var woocommerce_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":
 
 				
 				<p class="form-row">
-					<input type="hidden" id="woocommerce-login-nonce" name="woocommerce-login-nonce" value="647aab5333"><input type="hidden" name="_wp_http_referer" value="/shop/?simply_static_page=3565">					<button type="submit" class="woocommerce-Button button" name="login" value="Đăng nhập">Đăng nhập</button>
+					<input type="hidden" id="woocommerce-login-nonce" name="woocommerce-login-nonce" value="332c60fcc8"><input type="hidden" name="_wp_http_referer" value="/shop/?simply_static_page=3566">					<button type="submit" class="woocommerce-Button button" name="login" value="Đăng nhập">Đăng nhập</button>
 					<label class="woocommerce-form__label woocommerce-form__label-for-checkbox inline">
 						<input class="woocommerce-form__input woocommerce-form__input-checkbox" name="rememberme" type="checkbox" id="rememberme" value="forever"> <span>Ghi nhớ mật khẩu</span>
 					</label>
@@ -1075,6 +1005,44 @@ var woocommerce_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":
 			</form>
 		</div><!-- .login-inner -->
 
+
+		</div>
+
+		<div class="col-2 large-6 col pb-0">
+
+			<div class="account-register-inner">
+
+				<h3 class="uppercase">Đăng ký</h3>
+
+				<form method="post" class="woocommerce-form woocommerce-form-register register">
+
+					
+					
+					<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+						<label for="reg_email">Địa chỉ email&nbsp;<span class="required">*</span></label>
+						<input type="email" class="woocommerce-Input woocommerce-Input--text input-text" name="email" id="reg_email" autocomplete="email" value="">					</p>
+
+					
+						<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+							<label for="reg_password">Mật khẩu&nbsp;<span class="required">*</span></label>
+							<input type="password" class="woocommerce-Input woocommerce-Input--text input-text" name="password" id="reg_password" autocomplete="new-password">
+						</p>
+
+					
+					<wc-order-attribution-inputs></wc-order-attribution-inputs><div class="woocommerce-privacy-policy-text"><p>Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our <a href="/?page_id=3" class="woocommerce-privacy-policy-link" target="_blank">chính sách riêng tư</a>.</p>
+</div>
+					<p class="woocommerce-FormRow form-row">
+						<input type="hidden" id="woocommerce-register-nonce" name="woocommerce-register-nonce" value="d4b3bf9d5e"><input type="hidden" name="_wp_http_referer" value="/shop/?simply_static_page=3566">													<button type="submit" class="woocommerce-Button button" name="register" value="Đăng ký">Đăng ký</button>
+											</p>
+
+					
+				</form>
+
+			</div><!-- .register-inner -->
+
+		</div><!-- .large-6 -->
+
+	</div> <!-- .row -->
 
 </div><!-- .account-login-container -->
 

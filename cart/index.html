@@ -56,7 +56,14 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/15
                 } else {
                     document.addEventListener( "DOMContentLoaded", callback );
                 }
-            };</script><script type="text/javascript" src="/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
+            };</script><script type="text/javascript" src="/wp-includes/js/dist/hooks.min.js?ver=4d63a3d491d11ffd8ac6" id="wp-hooks-js"></script>
+<script type="text/javascript" src="/wp-includes/js/dist/i18n.min.js?ver=5e580eb46a90c2b997e6" id="wp-i18n-js"></script>
+<script type="text/javascript" id="wp-i18n-js-after">
+/*  */
+wp.i18n.setLocaleData( { 'text directionltr': [ 'ltr' ] } );
+/*  */
+</script>
+<script type="text/javascript" src="/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
 <script type="text/javascript" src="/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" id="jquery-migrate-js"></script>
 <script type="text/javascript" src="/wp-content/plugins/woocommerce/assets/js/jquery-blockui/jquery.blockUI.min.js?ver=2.7.0-wc.9.8.1" id="jquery-blockui-js" defer data-wp-strategy="defer"></script>
 <script type="text/javascript" id="wc-add-to-cart-js-extra">/*  */
@@ -77,10 +84,29 @@ var wc_address_i18n_params = {"locale":"{\"AE\":{\"postcode\":{\"required\":fals
 /*  */</script>
 <script type="text/javascript" src="/wp-content/plugins/woocommerce/assets/js/frontend/address-i18n.min.js?ver=9.8.1" id="wc-address-i18n-js" defer data-wp-strategy="defer"></script>
 <script type="text/javascript" id="wc-cart-js-extra">/*  */
-var wc_cart_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":"\/?wc-ajax=%%endpoint%%","update_shipping_method_nonce":"a407f86fa9","apply_coupon_nonce":"fda0e99cd0","remove_coupon_nonce":"abd9d362de"};
+var wc_cart_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":"\/?wc-ajax=%%endpoint%%","update_shipping_method_nonce":"d2abe9ce3c","apply_coupon_nonce":"fe4401d5fb","remove_coupon_nonce":"13054fa915"};
 /*  */</script>
 <script type="text/javascript" src="/wp-content/plugins/woocommerce/assets/js/frontend/cart.min.js?ver=9.8.1" id="wc-cart-js" defer data-wp-strategy="defer"></script>
 <script type="text/javascript" src="/wp-content/plugins/woocommerce/assets/js/selectWoo/selectWoo.full.min.js?ver=1.0.9-wc.9.8.1" id="selectWoo-js" defer data-wp-strategy="defer"></script>
+<script type="text/javascript" id="zxcvbn-async-js-extra">/*  */
+var _zxcvbnSettings = {"src":"\/wp-includes\/js\/zxcvbn.min.js"};
+/*  */</script>
+<script type="text/javascript" src="/wp-includes/js/zxcvbn-async.min.js?ver=1.0" id="zxcvbn-async-js"></script>
+<script type="text/javascript" id="password-strength-meter-js-extra">/*  */
+var pwsL10n = {"unknown":"Mật khẩu mạnh không xác định","short":"Rất yếu","bad":"Yếu","good":"Trung bình","strong":"Mạnh","mismatch":"Mật khẩu không khớp"};
+/*  */</script>
+<script type="text/javascript" id="password-strength-meter-js-translations">/*  */
+( function( domain, translations ) {
+	var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
+	localeData[""].domain = domain;
+	wp.i18n.setLocaleData( localeData, domain );
+} )( "default", {"translation-revision-date":"2025-04-29 12:00:43+0000","generator":"GlotPress\/4.0.1","domain":"messages","locale_data":{"messages":{"":{"domain":"messages","plural-forms":"nplurals=1; plural=0;","lang":"vi_VN"},"%1$s is deprecated since version %2$s! Use %3$s instead. Please consider writing more inclusive code.":["%1$s đã ngừng hoạt động từ phiên bản %2$s! Sử dụng thay thế bằng %3$s."]}},"comment":{"reference":"wp-admin\/js\/password-strength-meter.js"}} );
+/*  */</script>
+<script type="text/javascript" src="/wp-admin/js/password-strength-meter.min.js?ver=6.8.1" id="password-strength-meter-js"></script>
+<script type="text/javascript" id="wc-password-strength-meter-js-extra">/*  */
+var wc_password_strength_meter_params = {"min_password_strength":"3","stop_checkout":"","i18n_password_error":"Vui lòng nhập mật khẩu khó hơn.","i18n_password_hint":"Gợi ý: Mật khẩu phải có ít nhất 12 ký tự. Để nâng cao độ bảo mật, sử dụng chữ in hoa, in thường, chữ số và các ký tự đặc biệt như ! \" ? $ % ^ & )."};
+/*  */</script>
+<script type="text/javascript" src="/wp-content/plugins/woocommerce/assets/js/frontend/password-strength-meter.min.js?ver=9.8.1" id="wc-password-strength-meter-js" defer data-wp-strategy="defer"></script>
 <link rel="https://api.w.org/" href="/wp-json/"><link rel="alternate" title="JSON" type="application/json" href="/wp-json/wp/v2/pages/489"><link rel="EditURI" type="application/rsd+xml" title="RSD" href="/xmlrpc.php?rsd">
 <meta name="generator" content="WordPress 6.8.1">
 <meta name="generator" content="WooCommerce 9.8.1">
@@ -92,101 +118,26 @@ var wc_cart_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":"\/?
 			<script class="hsq-set-content-id" data-content-id="standard-page">var _hsq = _hsq || [];
 				_hsq.push(["setContentType", "standard-page"]);</script>
 			<!-- DO NOT COPY THIS SNIPPET! End of Page Analytics Tracking for HubSpot WordPress plugin -->
-			<style>/*form bình luận*/
-        .xss-form {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        /*chữ Tên với Bình luận*/
-        .xss-form label {
-            font-size: 1rem;
-            color: #333;
-            margin-bottom: -15px;
-            display: block;
-        }
-
-        /*ô nhập*/
-        .xss-form input[type="text"],
-        .xss-form textarea {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: -10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
-
-        .xss-form input[type="text"]:focus,
-        .xss-form textarea:focus {
-            border-color: #ff7f7f;
-            outline: none;
-        }
-
-        /*nút gửi*/
-        .xss-form button {
-            background-color: #d98484 !important;
-            color: #fff;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            font-size: 1rem;
-            cursor: pointer;
-            width: 100%;
-        }
-
-    /*phần danh sách bình luận */
-        .xss-comments {
-            max-width: 600px; /* Chiều rộng tối đa của danh sách bình luận */
-            margin: 20px auto; /* Căn giữa danh sách bình luận */
-            padding: 0;
-        }
-
-        .xss-comments ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .xss-comments li {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #f7f7f7;
-            border-left: 5px solid #d98484; /* Thêm viền trái cho bình luận */
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
-        }
-
-        .xss-comments li:hover {
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .xss-comments strong {
-            font-size: 1.2rem;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .xss-comments p {
-            font-size: 1rem;
-            color: #444;
-            line-height: 1.6;
-        }
-
-        .xss-comments code {
-            font-size: 0.9rem;
-            color: #888;
-            padding: 12px;
-            background-color: #e8e8e8;
-            border-radius: 5px;
-            display: block;
-            margin-top: 10px;
-        }</style><style>.bg{opacity: 0; transition: opacity 1s; -webkit-transition: opacity 1s;} .bg-loaded{opacity: 1;}</style><!--[if IE]><link rel="stylesheet" type="text/css" href="/wp-content/themes/flatsome/assets/css/ie-fallback.css"><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.1/html5shiv.js"></script><script>var head = document.getElementsByTagName('head')[0],style = document.createElement('style');style.type = 'text/css';style.styleSheet.cssText = ':before,:after{content:none !important';head.appendChild(style);setTimeout(function(){head.removeChild(style);}, 0);</script><script src="/wp-content/themes/flatsome/assets/libs/ie-flexibility.js"></script><![endif]-->    <script type="text/javascript">WebFontConfig = {
+			<style>.xss-form {
+        max-width: 600px; margin: 20px auto; padding: 20px;
+        background: #f9f9f9; border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .xss-form label { font-size: 1rem; color: #333; }
+    .xss-form textarea {
+        width: 100%; padding: 12px; margin: 8px 0;
+        border: 1px solid #ccc; border-radius: 5px;
+    }
+    .xss-form button {
+        background: #d98484 !important; color: #fff;
+        padding: 12px; border: none; border-radius: 5px;
+        cursor: pointer; width: 100%;
+    }
+    .xss-comments { max-width: 600px; margin: 20px auto; }
+    .xss-comments li {
+        background: #ffffff; border-left: 5px solid #d98484;
+        margin-bottom: 15px; padding: 12px; border-radius: 6px;
+    }</style><style>.bg{opacity: 0; transition: opacity 1s; -webkit-transition: opacity 1s;} .bg-loaded{opacity: 1;}</style><!--[if IE]><link rel="stylesheet" type="text/css" href="/wp-content/themes/flatsome/assets/css/ie-fallback.css"><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.1/html5shiv.js"></script><script>var head = document.getElementsByTagName('head')[0],style = document.createElement('style');style.type = 'text/css';style.styleSheet.cssText = ':before,:after{content:none !important';head.appendChild(style);setTimeout(function(){head.removeChild(style);}, 0);</script><script src="/wp-content/themes/flatsome/assets/libs/ie-flexibility.js"></script><![endif]-->    <script type="text/javascript">WebFontConfig = {
       google: { families: [ "Roboto:regular,700","Roboto:regular,regular","Roboto:regular,700","Roboto:regular,regular", ] }
     };
     (function() {
@@ -657,6 +608,11 @@ var wc_cart_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":"\/?
 <div class="account-container lightbox-inner">
 
 	
+	<div class="col2-set row row-divided row-large" id="customer_login">
+
+		<div class="col-1 large-6 col pb-0">
+
+	
 		<div class="account-login-inner">
 
 			<h3 class="uppercase">Đăng nhập</h3>
@@ -674,7 +630,7 @@ var wc_cart_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":"\/?
 
 				
 				<p class="form-row">
-					<input type="hidden" id="woocommerce-login-nonce" name="woocommerce-login-nonce" value="647aab5333"><input type="hidden" name="_wp_http_referer" value="/cart/?simply_static_page=3442">					<button type="submit" class="woocommerce-Button button" name="login" value="Đăng nhập">Đăng nhập</button>
+					<input type="hidden" id="woocommerce-login-nonce" name="woocommerce-login-nonce" value="332c60fcc8"><input type="hidden" name="_wp_http_referer" value="/cart/?simply_static_page=3443">					<button type="submit" class="woocommerce-Button button" name="login" value="Đăng nhập">Đăng nhập</button>
 					<label class="woocommerce-form__label woocommerce-form__label-for-checkbox inline">
 						<input class="woocommerce-form__input woocommerce-form__input-checkbox" name="rememberme" type="checkbox" id="rememberme" value="forever"> <span>Ghi nhớ mật khẩu</span>
 					</label>
@@ -687,6 +643,44 @@ var wc_cart_params = {"ajax_url":"\/wp-admin\/admin-ajax.php","wc_ajax_url":"\/?
 			</form>
 		</div><!-- .login-inner -->
 
+
+		</div>
+
+		<div class="col-2 large-6 col pb-0">
+
+			<div class="account-register-inner">
+
+				<h3 class="uppercase">Đăng ký</h3>
+
+				<form method="post" class="woocommerce-form woocommerce-form-register register">
+
+					
+					
+					<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+						<label for="reg_email">Địa chỉ email&nbsp;<span class="required">*</span></label>
+						<input type="email" class="woocommerce-Input woocommerce-Input--text input-text" name="email" id="reg_email" autocomplete="email" value="">					</p>
+
+					
+						<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+							<label for="reg_password">Mật khẩu&nbsp;<span class="required">*</span></label>
+							<input type="password" class="woocommerce-Input woocommerce-Input--text input-text" name="password" id="reg_password" autocomplete="new-password">
+						</p>
+
+					
+					<wc-order-attribution-inputs></wc-order-attribution-inputs><div class="woocommerce-privacy-policy-text"><p>Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our <a href="/?page_id=3" class="woocommerce-privacy-policy-link" target="_blank">chính sách riêng tư</a>.</p>
+</div>
+					<p class="woocommerce-FormRow form-row">
+						<input type="hidden" id="woocommerce-register-nonce" name="woocommerce-register-nonce" value="d4b3bf9d5e"><input type="hidden" name="_wp_http_referer" value="/cart/?simply_static_page=3443">													<button type="submit" class="woocommerce-Button button" name="register" value="Đăng ký">Đăng ký</button>
+											</p>
+
+					
+				</form>
+
+			</div><!-- .register-inner -->
+
+		</div><!-- .large-6 -->
+
+	</div> <!-- .row -->
 
 </div><!-- .account-login-container -->
 
@@ -704,13 +698,6 @@ var cr_ajax_object = {"ajax_url":"\/wp-admin\/admin-ajax.php","disable_lightbox"
 /*  */</script>
 <script type="text/javascript" src="/wp-content/plugins/customer-reviews-woocommerce/js/frontend.js?ver=5.75.1" id="cr-frontend-js-js"></script>
 <script type="text/javascript" src="/wp-content/plugins/customer-reviews-woocommerce/js/colcade.js?ver=5.75.1" id="cr-colcade-js"></script>
-<script type="text/javascript" src="/wp-includes/js/dist/hooks.min.js?ver=4d63a3d491d11ffd8ac6" id="wp-hooks-js"></script>
-<script type="text/javascript" src="/wp-includes/js/dist/i18n.min.js?ver=5e580eb46a90c2b997e6" id="wp-i18n-js"></script>
-<script type="text/javascript" id="wp-i18n-js-after">
-/*  */
-wp.i18n.setLocaleData( { 'text directionltr': [ 'ltr' ] } );
-/*  */
-</script>
 <script type="text/javascript" src="/wp-content/plugins/contact-form-7/includes/swv/js/index.js?ver=6.0.6" id="swv-js"></script>
 <script type="text/javascript" id="contact-form-7-js-translations">/*  */
 ( function( domain, translations ) {
@@ -749,25 +736,6 @@ var flatsomeVars = {"ajaxurl":"\/wp-admin\/admin-ajax.php","rtl":"","sticky_heig
 /*  */</script>
 <script type="text/javascript" src="/wp-content/themes/flatsome/assets/js/flatsome.js?ver=3.7.1" id="flatsome-js-js"></script>
 <script type="text/javascript" src="/wp-content/themes/flatsome/assets/js/woocommerce.js?ver=3.7.1" id="flatsome-theme-woocommerce-js-js"></script>
-<script type="text/javascript" id="zxcvbn-async-js-extra">/*  */
-var _zxcvbnSettings = {"src":"\/wp-includes\/js\/zxcvbn.min.js"};
-/*  */</script>
-<script type="text/javascript" src="/wp-includes/js/zxcvbn-async.min.js?ver=1.0" id="zxcvbn-async-js"></script>
-<script type="text/javascript" id="password-strength-meter-js-extra">/*  */
-var pwsL10n = {"unknown":"Mật khẩu mạnh không xác định","short":"Rất yếu","bad":"Yếu","good":"Trung bình","strong":"Mạnh","mismatch":"Mật khẩu không khớp"};
-/*  */</script>
-<script type="text/javascript" id="password-strength-meter-js-translations">/*  */
-( function( domain, translations ) {
-	var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
-	localeData[""].domain = domain;
-	wp.i18n.setLocaleData( localeData, domain );
-} )( "default", {"translation-revision-date":"2025-04-29 12:00:43+0000","generator":"GlotPress\/4.0.1","domain":"messages","locale_data":{"messages":{"":{"domain":"messages","plural-forms":"nplurals=1; plural=0;","lang":"vi_VN"},"%1$s is deprecated since version %2$s! Use %3$s instead. Please consider writing more inclusive code.":["%1$s đã ngừng hoạt động từ phiên bản %2$s! Sử dụng thay thế bằng %3$s."]}},"comment":{"reference":"wp-admin\/js\/password-strength-meter.js"}} );
-/*  */</script>
-<script type="text/javascript" src="/wp-admin/js/password-strength-meter.min.js?ver=6.8.1" id="password-strength-meter-js"></script>
-<script type="text/javascript" id="wc-password-strength-meter-js-extra">/*  */
-var wc_password_strength_meter_params = {"min_password_strength":"3","stop_checkout":"","i18n_password_error":"Vui lòng nhập mật khẩu khó hơn.","i18n_password_hint":"Gợi ý: Mật khẩu phải có ít nhất 12 ký tự. Để nâng cao độ bảo mật, sử dụng chữ in hoa, in thường, chữ số và các ký tự đặc biệt như ! \" ? $ % ^ & )."};
-/*  */</script>
-<script type="text/javascript" src="/wp-content/plugins/woocommerce/assets/js/frontend/password-strength-meter.min.js?ver=9.8.1" id="wc-password-strength-meter-js" defer data-wp-strategy="defer"></script>
 
 </body>
 </html>
