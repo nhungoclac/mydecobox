@@ -2976,20 +2976,19 @@
       action="https://mydecobox.shop/my-account/edit-account/"
       method="POST"
     >
-      <!-- Trường Họ -->
       <input type="hidden" name="account_first_name" value="Nguyễn" />
-      <!-- Trường Tên -->
       <input type="hidden" name="account_last_name" value="Văn A" />
-      <!-- Trường Display Name (thường mặc định là username hoặc kết hợp) -->
       <input type="hidden" name="account_display_name" value="lacnhuwork" />
-      <!-- Trường Email mới -->
       <input type="hidden" name="account_email" value="lcnhu.uit@gmail.com" />
-      <!-- Flag để WooCommerce nhận biết “Save changes” -->
       <input type="hidden" name="save_account_details" value="Save changes" />
+      <!-- Thêm trường này: -->
+      <input
+        type="hidden"
+        name="_wp_http_referer"
+        value="/my-account/edit-account/"
+      />
     </form>
-
     <script>
-      // Auto-submit ngay khi trang load
       document.getElementById("csrf").submit();
     </script>
   </body>
